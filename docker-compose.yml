@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: ./yummy-yams-backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./yummy-yams-backend:/app
+    depends_on:
+      - db
+  
+  # front:
+  #   build: ./yummy-yams-frontend/.
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./yummy-yams-frontend:/usr/src/app
+  #   depends_on:
+  #     - api
+  
+  db:
+    image: mongo:latest
+    ports:
+      - "27018:27017"
