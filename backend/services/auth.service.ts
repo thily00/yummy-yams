@@ -1,49 +1,47 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { IUser } from "../models/User";
 import UserService from './user.service';
 import { AppError } from '../config/Errorhandler';
+import { HttpStatus } from '../enums/HttpStatus.enum'
 
 const userService = new UserService();
 class AuthService {
 
-    async login(email: string, password: string): Promise<IUser> {
+    async login(email: string, password: string): Promise<string> {
         if (!email || !password) {
-            throw new AppError('Email and password are required!', 400);
+            throw new AppError('Email and password are required!', HttpStatus.BAD_REQUEST);
         }
 
-        // check if user exists
         const user: IUser | null = await userService.findByEmail(email);
         if (!user) {
             throw new Error('User not found!');
         }
 
-        // check if password is correct
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
-            throw new AppError('Invalid credentials', 401);
+            throw new AppError('Invalid credentials', HttpStatus.UNAUTHORIZED);
         }
 
-        return user;
+        const userId = user.id;
+        const userRole = user.role; 
+        const token = jwt.sign({ userId, userRole }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
+        return token;
     }
     
     
     async register(name: string, email: string, password: string): Promise<IUser> {
         if (!name || !email || !password) {
-            throw new AppError('Name, email and password are required!', 400);
+            throw new AppError('Name, email and password are required!', HttpStatus.BAD_REQUEST);
         }
 
-        // check if user exists
         const user: IUser | null = await userService.findByEmail(email);
         if (user) {
-            throw new AppError('User already exists!', 400);
+            throw new AppError('User already exists!', HttpStatus.BAD_REQUEST);
         }
 
-        // hash password
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // create user
         const newUser = await userService.createUser(name, email, hashedPassword);
-
         return newUser;
     }
 

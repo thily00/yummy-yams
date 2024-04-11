@@ -1,9 +1,10 @@
+import { Role } from "../enums/User.enum";
 import User, { IUser } from "../models/User";
 
 class UserService {
 
     createUser = async (name: string, email: string, password: string): Promise<IUser> => {
-        const newUser = new User({ name, email, password });
+        const newUser = new User({ name, email, password, role: Role.PLAYER });
         await newUser.save();
         return newUser;
     }
