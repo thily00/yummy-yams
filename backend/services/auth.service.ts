@@ -1,11 +1,7 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { IUser } from "../models/User";
 import UserService from './user.service';
-
 import { AppError } from '../config/Errorhandler';
-
-
-
 
 const userService = new UserService();
 class AuthService {

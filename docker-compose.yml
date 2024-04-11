@@ -3,12 +3,12 @@ version: '3.9'
 services:
   api:
     build:
-      context: ./yummy-yams-backend
+      context: ./backend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
-      - ./yummy-yams-backend:/app
+      - ./backend:/app
     depends_on:
       - db
   
