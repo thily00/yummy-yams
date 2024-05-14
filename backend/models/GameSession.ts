@@ -8,7 +8,7 @@ export interface IGameSession extends Document {
 
 const gameSessionSchema = new Schema({
   name: { type: String, required: true },
-  status: { type: String, required: true, default: GameStatus.INPROGRESS }
+  status: { type: String, required: true, default: GameStatus.INPROGRESS },
 });
 
 

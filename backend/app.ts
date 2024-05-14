@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import express, { Express } from 'express';
 
 import authRoutes from './routes/auth';
-import gameSessionRoutes from './routes/gamesession';
+import gameRoutes from './routes/game';
 
 require('dotenv').config();
 
@@ -11,7 +11,7 @@ const PORT = 3000;
 
 app.use(express.json());
 app.use('/api', authRoutes);
-app.use('/api', gameSessionRoutes);
+app.use('/api', gameRoutes);
 
 mongoose.connect(process.env.DATABASE_URL as string);
 console.log('Connected to Database successfully');
