@@ -1,0 +1,88 @@
+@import url(./assets/css/spacing.sss);
+html, body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+label{
+    font-size: 14px;
+}
+
+
+.p-password {
+    width: inherit;
+    .p-icon-field {
+        width: 100%;
+    }
+}
+  
+.p-password-input {
+    width: inherit;
+}
+
+.fullscreen {
+    width: 100vw;
+    height: 100vh;
+}
+
+.w-full{
+    width: 100%;
+}
+
+.h-full{
+    height: 100%;
+}
+
+.layout{
+    background-color: #ffffff;
+    width: 100vh;
+    height: 100vh;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.flex-column{
+    flex-direction: column;
+}
+
+.flex-row{
+    flex-direction: row;
+}
+
+.gap-2{
+    gap: 0.5rem;
+}
+
+
+.justify-content-center{
+    justify-content: center;
+}
+
+.justify-content-between{
+    justify-content: space-between;
+}
+
+.align-items-center{
+    align-items: center;
+}
+
+.auth-form{
+    width: 100%;
+    max-width: 30rem;
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.bg-gray{
+    background-color: #f1f5f9
+}
+
+
+
+// login page 
