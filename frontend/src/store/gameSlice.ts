@@ -22,7 +22,7 @@ interface GameSession {
 interface IUpdateUserSession {
     attempts: number;
     win: boolean;
-    reward: string | null;
+    rewardName: string | null;
 }
 
 const initialState: GameSession = {
@@ -57,7 +57,7 @@ const gameSlice = createSlice({
         if (session) {
             session.attempts = action.payload.attempts;
             session.win = action.payload.win;
-            session.rewardName = action.payload.reward;
+            session.rewardName = action.payload.rewardName;
         }
         state.session = session;
     },

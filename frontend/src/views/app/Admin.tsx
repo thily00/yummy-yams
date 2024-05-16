@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import AppLayout from '../../components/layout/AppLayout'
-import { getUserData } from '../../services/user';
 import { getAllSessions, createSession, closeSession } from '../../services/game';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
@@ -22,7 +21,7 @@ const Admin: React.FC = () => {
 
     useEffect(() => {
         loadSessions();
-    }, [])
+    })
 
     const loadSessions = async() => {
         try {

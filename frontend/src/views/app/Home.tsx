@@ -11,7 +11,7 @@ const Home: React.FC = () => {
     
     useEffect(() => {
         getActiveGame();
-    }, [])
+    })
 
     const getActiveGame = async () => {
         try {

@@ -17,6 +17,11 @@ const GameBoard: React.FC = () => {
   const rewardName = useSelector((state:RootState) => state.game.session?.rewardName) || '';
   const sessionId = useSelector((state:RootState) => state.game.session?.session._id);
 
+  interface IUpdateUserSession {
+    attempts: number;
+    win: boolean;
+    rewardName: string | null;
+  }
   
   const [dices, setDices] = useState<number[]>([0, 0, 0, 0, 0]);
 
@@ -27,7 +32,7 @@ const GameBoard: React.FC = () => {
       
       if(response.success) {
         setDices(gsap.utils.shuffle(response.data.result));
-        const userData = {attempts: response.data.attempts, win: response.data.win, rewardName: response.data.reward};
+        const userData:IUpdateUserSession = {attempts: response.data.attempts, win: response.data.win, rewardName: response.data.reward};
         
         toast.success(response.message, { position: "top-center" });
         dispatch(updateUserSession(userData));

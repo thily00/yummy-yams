@@ -16,7 +16,7 @@ const GameResult: React.FC = () => {
 
     useEffect(() => {
         loadResult();
-    }, [])
+    })
 
     const loadResult = async() => {
         try {
