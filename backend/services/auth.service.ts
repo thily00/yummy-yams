@@ -6,9 +6,12 @@ import { AppError } from '../config/Errorhandler';
 import { HttpStatus } from '../enums/HttpStatus.enum'
 
 const userService = new UserService();
+interface ILoginResponse {
+    token: string;
+    userRole: string;
+}
 class AuthService {
-
-    async login(email: string, password: string): Promise<string> {
+    async login(email: string, password: string): Promise<ILoginResponse> {
         if (!email || !password) {
             throw new AppError('Email and password are required!', HttpStatus.BAD_REQUEST);
         }
@@ -26,7 +29,7 @@ class AuthService {
         const userId = user.id;
         const userRole = user.role; 
         const token = jwt.sign({ userId, userRole }, process.env.JWT_SECRET as string, { expiresIn: process.env.JWT_EXPIRES_IN });
-        return token;
+        return { token, userRole };
     }
     
     

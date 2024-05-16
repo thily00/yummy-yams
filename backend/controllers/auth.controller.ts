@@ -7,11 +7,11 @@ const authService = new AuthService();
 export const login = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
-        const token = await authService.login(email, password);
+        const data = await authService.login(email, password);
         res.status(HttpStatus.OK).json({ 
             success: true, 
             message: 'User logged in successfully',
-            data: token 
+            data: data 
         });
     } catch (error: any) {
         handleError(error, res);

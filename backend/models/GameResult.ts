@@ -14,7 +14,7 @@ export interface IGameResult extends Document {
 const gameResultSchema = new Schema({
     player: { type: mongoose.Schema.Types.ObjectId, ref: User, required: true },
     gameSession: { type: mongoose.Schema.Types.ObjectId, ref: GameSession, required: true},
-    gameReward: { type: mongoose.Schema.Types.ObjectId, ref: GameReward},
+    gameReward: { type: mongoose.Schema.Types.ObjectId, ref: GameReward, default: null},
     attempts: { type: Number, required: true, default: 0 },
     win: { type: Boolean, required: true, default: false }
 });

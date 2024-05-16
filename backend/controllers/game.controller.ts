@@ -5,8 +5,7 @@ import { handleError } from '../config/Errorhandler';
 const gameService = new GameService();
 export const createNewSession = async (req: Request, res: Response) => {
     try {
-        const { name } = req.body;
-        const game = await gameService.createnewSession(name);
+        const game = await gameService.createnewSession();
         res.status(201).json({ 
             success: true, 
             message: 'New session created successfully', 
@@ -20,7 +19,7 @@ export const createNewSession = async (req: Request, res: Response) => {
 export const getAllSessions = async (req: Request, res: Response) => {
     try {
         const sessions = await gameService.getAllSessions();
-        const message = sessions.length >0 ? 'Currents session fetched successfully' : 'No current session found';
+        const message = sessions.length > 0 ? 'Currents session fetched successfully' : 'No current session found';
        
         res.status(200).json({ 
             success: true, 
@@ -33,15 +32,16 @@ export const getAllSessions = async (req: Request, res: Response) => {
     }
 }
 
-export const getActiveSessions = async (req: Request, res: Response) => {
+export const getActiveSession = async (req: Request, res: Response) => {
     try {
-        const sessions = await gameService.getActiveSessions();
-        const message = sessions.length >0 ? 'Active session fetched successfully' : 'No active session found';
+        const playerId = (req as any).userId;
+        const session = await gameService.getActiveSession(playerId);
+        const message = session ? 'Active session fetched successfully' : 'No active session found';
        
         res.status(200).json({ 
             success: true, 
             message: message, 
-            data: sessions 
+            data: session
         });
         
     } catch (error: any) {
@@ -67,20 +67,37 @@ export const updateSession = async (req: Request, res: Response) => {
 
 export const playGame = async (req: Request, res: Response) => {
     try {
-        const { sessionId, playerId } = req.body;
+        const { sessionId} = req.body;
+        const playerId = (req as any).userId;
         const result = await gameService.playGame(sessionId, playerId);
         
         let message = result[0].win ? 'Congratulations! You won' : 'You lost';
         let response = {
             attempts: result[0].attempts,
-            result: result[1],
-            win: result[0].win
+            result: result[2],
+            win: result[0].win,
+            rewardName: result[1] !== null ? result[1].name : null
         }
 
         res.status(200).json({ 
             success: true, 
             message: message, 
             data: response
+        });
+    } catch (error: any) {
+        handleError(error, res);
+    }
+};
+
+
+export const getSessionResult = async (req: Request, res: Response) => {
+    try {
+        const sessionId = req.params.id;
+        const result = await gameService.getSessionResult(sessionId);
+        res.status(200).json({ 
+            success: true, 
+            message: 'Session result fetched successfully', 
+            data: result 
         });
     } catch (error: any) {
         handleError(error, res);

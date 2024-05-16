@@ -13,6 +13,10 @@ class UserService {
         return await User.findOne({ email: email });
     }
 
+    me = async (id:string): Promise<IUser | null> => {
+        return await User.findById(id);
+    }
+
 }
 
 export default UserService;

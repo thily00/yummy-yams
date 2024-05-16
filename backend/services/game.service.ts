@@ -8,11 +8,22 @@ import GameResult, { IGameResult } from '../models/GameResult';
 import GameSession, {IGameSession} from '../models/GameSession';
 import { rollDice, checkWinningCombination } from '../utils/utils';
 
+
+interface IActiveSession {
+    session: IGameSession;
+    attempts: number;
+    win: boolean;
+    rewardName: undefined | null | string;
+}
+
 class GameService {
 
-    async createnewSession(name: string): Promise<IGameSession> {
-        if(!name){
-            throw new AppError('Name is required', HttpStatus.BAD_REQUEST);
+    async createnewSession(): Promise<IGameSession> {
+        const name = `Session-${Date.now()}`;
+
+        const activeSession: IGameSession | null = await GameSession.findOne({ status: GameStatus.INPROGRESS });
+        if (activeSession) {
+            throw new AppError('There is an active session already', HttpStatus.CONFLICT);
         }
 
         const newSession = new GameSession({ name });
@@ -25,17 +36,46 @@ class GameService {
         return await GameSession.find();
     }
 
-    async getActiveSessions(): Promise<IGameSession[] | []> {
-        return await GameSession.find({ status: GameStatus.INPROGRESS });
+    async getActiveSession(playerId: string): Promise<Partial<IActiveSession> | null> {
+        let rewardName: string | undefined | null = null;
+        let res: Partial<IActiveSession> | null = null;
+        let activeSession: IGameSession | null = await GameSession.findOne({ status: GameStatus.INPROGRESS });
+        if(!activeSession) {
+            return res;
+        }
+
+        let playerResult = await GameResult.findOne({ player: playerId, gameSession: activeSession._id });
+
+        if(playerResult && playerResult.gameReward){
+            const gameReward = await GameReward.findById(playerResult.gameReward);
+            rewardName = gameReward?.name;
+        }
+        
+        if(!playerResult){
+            playerResult = new GameResult({ player: playerId, gameSession: activeSession.id, attempts: 3, win: false});
+            playerResult.save();
+        }
+        
+        res = {
+            session: activeSession,
+            attempts: playerResult.attempts,
+            win: playerResult.win,
+            rewardName: rewardName
+        };
+ 
+        return res;
     }
 
     async updateSession(sessionId: string, updateFields: Partial<IGameSession>): Promise<IGameSession | any> {
-       
         const session: IGameSession | null = await GameSession.findByIdAndUpdate(sessionId, updateFields);
         if(!session){
             throw new AppError('Session not found', HttpStatus.NOT_FOUND);
         }
         return session;
+    }
+
+    async getUserResult(sessionId: string, playerId: string): Promise<IGameResult | any> {
+        return await GameResult.findOne({ player: playerId, gameSession: sessionId });
     }
 
     async playGame(sessionId: string, playerId: string): Promise<IGameReward | any> {
@@ -53,7 +93,8 @@ class GameService {
             throw new AppError('Game session not found or is ended', HttpStatus.NOT_FOUND);
         }
 
-        let playerResult: IGameResult | null = await GameResult.findOne({ player: playerId, gameSession: sessionId });
+        let playerResult: IGameResult | null = await GameResult.findOne({ player: playerId, gameSession: sessionId }).populate('gameReward');
+        
         if(!playerResult) {
             playerResult = new GameResult({ player: playerId, gameSession: sessionId, attempts: 3, win: false });
         }
@@ -68,15 +109,26 @@ class GameService {
 
         const dices = rollDice();
         const win = checkWinningCombination(dices);
-
+        let reward: IGameReward | null = null;
         if(!win){
             playerResult.attempts -= 1;
         }else{
             playerResult.win = true;
+            reward = await this.pickRandomReward(sessionId);
+            if(reward){
+                playerResult.gameReward = reward.id;
+            }
         }
 
         await playerResult.save();
-        return [playerResult, dices];
+        return [playerResult,reward, dices];
+    }
+
+    async getSessionResult(sessionId: string): Promise<IGameResult[]> {
+        return await GameResult.find({ gameSession: sessionId })
+                                .populate('gameReward')
+                                .populate('player')
+                                .populate('gameSession');
     }
 
     async populateRewards (sessionId: string): Promise<IGameReward[]> {
@@ -87,6 +139,16 @@ class GameService {
         );
         return await GameReward.insertMany(rewards);
     };
+
+    async pickRandomReward(sessionId: string): Promise<IGameReward | null> {
+        const reward: IGameReward | null = await GameReward.findOne({ gameSession: sessionId, stock: { $gt: 0} });
+        if(reward){
+            reward.stock -= 1;
+            return await reward.save();        
+        }else{
+            return null;
+        }
+    }
 }
 
 export default GameService;
