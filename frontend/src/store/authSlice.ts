@@ -7,6 +7,11 @@ interface AuthState {
   token: string | null;
 }
 
+interface LoginPayload {
+  token: string;
+  userRole: string;
+}
+
 const initialState: AuthState = {
   token: null,
   isAdmin: false,
@@ -17,13 +22,15 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state, action: PayloadAction<string>) {
-      state.token = action.payload;
+    login(state, action: PayloadAction<LoginPayload>) {
+      state.token = action.payload.token;
+      state.isAdmin = action.payload.userRole === 'admin';
       state.isLoggedIn = true;
     },
     logout(state) {
       state.token = null;
       state.isLoggedIn = false;
+      state.isAdmin = false;
     },
   },
 });

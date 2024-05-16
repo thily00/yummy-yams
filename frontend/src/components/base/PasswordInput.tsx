@@ -20,7 +20,7 @@ const PasswordInput:React.FC<InputTextProps> = ({label, placeholder, onUpdate}) 
   return (
     <div className="w-full d-flex flex-column gap-2 mb-3">
         <label htmlFor={label}>Confirmation du mot de passe</label>
-        <Password value={value} onChange={handleChange} placeholder={placeholder} toggleMask className="p-inputtext-sm" />
+        <Password value={value} onChange={handleChange} placeholder={placeholder} feedback={false} toggleMask className="p-inputtext-sm" />
     </div>
   )
 }

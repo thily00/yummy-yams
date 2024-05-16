@@ -1,5 +1,7 @@
 import React, { ReactNode } from 'react';
 
+import Navbar from './Navbar';
+
 interface AppLayoutProps {
   children: ReactNode;
 }
@@ -7,15 +9,10 @@ interface AppLayoutProps {
 const AppLayout: React.FC<AppLayoutProps> = ({children}) => {
   return (
     <div className="app-layout">
-    <header>
-      {/* Mettez ici le contenu de votre en-tête */}
-    </header>
+    <Navbar />
     <main>
       {children}
     </main>
-    <footer>
-      {/* Mettez ici le contenu de votre pied de page */}
-    </footer>
   </div>
   )
 }
