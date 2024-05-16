@@ -33,7 +33,7 @@ cd yummy-yams
 
 ### 2.Utilisez Docker Compose pour construire les images et lancer les conteneurs 
 ```bash
-docker-compose up
+docker-compose up --build
 ```
 
 
