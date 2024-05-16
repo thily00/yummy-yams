@@ -1,6 +1,6 @@
 import User, {IUser} from '../models/User';
 import { Rewards } from '../utils/constants';
-import { AppError } from '../config/Errorhandler';
+import { AppError } from '../config/ErrorHandler';
 import { GameStatus } from '../enums/GameStatus.enum';
 import { HttpStatus } from '../enums/HttpStatus.enum';
 import GameReward, { IGameReward } from '../models/GameReward';

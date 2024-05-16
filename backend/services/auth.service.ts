@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { IUser } from "../models/User";
 import UserService from './user.service';
-import { AppError } from '../config/Errorhandler';
+import { AppError } from '../config/ErrorHandler';
 import { HttpStatus } from '../enums/HttpStatus.enum'
 
 const userService = new UserService();

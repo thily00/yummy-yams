@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import UserService from '../services/user.service';
-import { handleError } from '../config/Errorhandler';
+import { handleError } from '../config/ErrorHandler';
 import { HttpStatus } from '../enums/HttpStatus.enum';
 
 const userService = new UserService();

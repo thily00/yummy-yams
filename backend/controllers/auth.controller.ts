@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import AuthService from '../services/auth.service';
-import { handleError } from '../config/Errorhandler';
+import { handleError } from '../config/ErrorHandler';
 import { HttpStatus } from '../enums/HttpStatus.enum';
 
 const authService = new AuthService();

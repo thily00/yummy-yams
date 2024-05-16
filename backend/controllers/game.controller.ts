@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import GameService from '../services/game.service';
-import { handleError } from '../config/Errorhandler';
+import { handleError } from '../config/ErrorHandler';
 
 const gameService = new GameService();
 export const createNewSession = async (req: Request, res: Response) => {
