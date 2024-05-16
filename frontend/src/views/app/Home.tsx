@@ -11,7 +11,8 @@ const Home: React.FC = () => {
     
     useEffect(() => {
         getActiveGame();
-    })
+        // eslint-disable-next-line
+    }, [])
 
     const getActiveGame = async () => {
         try {

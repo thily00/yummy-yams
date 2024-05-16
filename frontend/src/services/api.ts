@@ -2,7 +2,7 @@ import axios, { InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'ax
 import {store} from '../store'
 
 const api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
+    baseURL: `${import.meta.env.VITE_API_URL}/api`
 });
 
 api.interceptors.request.use(

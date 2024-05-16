@@ -16,7 +16,8 @@ const GameResult: React.FC = () => {
 
     useEffect(() => {
         loadResult();
-    })
+        // eslint-disable-next-line
+    }, [])
 
     const loadResult = async() => {
         try {

@@ -21,7 +21,8 @@ const Admin: React.FC = () => {
 
     useEffect(() => {
         loadSessions();
-    })
+        // eslint-disable-next-line
+    }, [])
 
     const loadSessions = async() => {
         try {

@@ -2,7 +2,9 @@
 
 ## Description
 
-Ce projet est une application fullstack utilisant React pour le frontend et Node.js pour le backend. Docker et Docker Compose sont utilisés pour faciliter le déploiement et l'exécution de l'application.
+Le jeu du Yam's (ou aussi Yahtzee) est un jeu de dés qui se joue seul ou à plusieurs.
+
+Le but du jeu est de réaliser des combinaisons de dés pour gagner des points. Le jeu se joue avec 5 dés et le joueur peut lancer les dés 3 fois à chaque tour.
 
 ## Prérequis
 
